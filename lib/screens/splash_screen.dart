@@ -1,8 +1,8 @@
 import 'package:advisory_apps/widgets/toast_bar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,10 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   checkTokenStatus() async {
     await Future.delayed(const Duration(seconds: 4), () async {
-      const storage = FlutterSecureStorage();
-
-      final String tokenStore = await storage.read(key: 'token') ?? '';
-      final String idStore = await storage.read(key: 'id') ?? '';
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String idStore = prefs.getString('id') ?? '';
+      final String tokenStore = prefs.getString('token') ?? '';
 
       if ((tokenStore.isEmpty ||
           tokenStore == '' && idStore.isEmpty ||

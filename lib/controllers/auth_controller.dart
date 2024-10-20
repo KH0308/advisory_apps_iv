@@ -3,7 +3,6 @@
 import 'package:advisory_apps/widgets/toast_bar_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 import '../services/database_service.dart';
@@ -12,8 +11,6 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   var obsScrText = true.obs;
   ToastBarWidget toastBarWidget = ToastBarWidget();
-
-  final storage = const FlutterSecureStorage();
 
   void updateObsScrText() {
     obsScrText.value = !obsScrText.value;

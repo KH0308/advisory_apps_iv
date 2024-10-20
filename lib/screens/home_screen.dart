@@ -1,10 +1,10 @@
-import 'package:advisory_apps/controllers/list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/list_controller.dart';
 import '../widgets/toast_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -81,8 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               IconButton(
                 onPressed: () async {
-                  const storage = FlutterSecureStorage();
-                  await storage.deleteAll();
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  await prefs.clear();
                   Get.offAllNamed('/signinScreen');
                 },
                 icon: Icon(
@@ -139,8 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           actions: [
                             ElevatedButton(
                               onPressed: () async {
-                                const storage = FlutterSecureStorage();
-                                await storage.deleteAll();
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.clear();
                                 Get.offAllNamed('/signinScreen');
                               },
                               style: ButtonStyle(
