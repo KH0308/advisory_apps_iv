@@ -46,6 +46,12 @@ To set up and run this application on your local machine, follow these steps:
 - The application assumes that the API used for fetching place is properly set up and accessible.
 - Proper handling of errors and edge cases related to API responses is implemented.
 
+## APK Download
+
+You can download the APK file for the application from the following link:
+
+[Download APK File](https://drive.google.com/drive/folders/1AnwggVEF4IqyxHysxpUt5udj_lGR2sEb?usp=sharing)
+
 ## Troubleshooting
 
 If you encounter any issues while setting up or running the application, please contact me on:
