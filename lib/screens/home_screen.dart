@@ -47,10 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           appBar: AppBar(
             leading: CircleAvatar(
-              radius: 50,
+              radius: 20,
+              backgroundColor: Colors.transparent,
               child: Image.asset(
                 'assets/images/advisory_logo.png',
-                fit: BoxFit.cover,
+                width: 35,
+                height: 35,
+                fit: BoxFit.fill,
               ),
             ),
             centerTitle: true,
@@ -89,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(
                   Icons.logout_rounded,
                   color: Colors.brown.shade900,
-                  size: 24,
+                  size: 30,
                 ),
               ),
             ],
@@ -173,7 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 } else if (listController.errorMessage.value !=
-                    'Invalid Token') {
+                        'Invalid Token' &&
+                    listController.errorMessage.value != '') {
                   return RefreshIndicator(
                     color: Colors.brown.shade400,
                     backgroundColor: Colors.black,

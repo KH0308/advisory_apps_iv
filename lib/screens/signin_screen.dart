@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../controllers/auth_controller.dart';
 import '../widgets/toast_bar_widget.dart';
@@ -23,6 +24,39 @@ class _SignInScreenState extends State<SignInScreen> {
   AuthController authController = Get.put(AuthController());
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  // Future<void> signInWithFacebook() async {
+  //   try {
+  //     final result = await FacebookAuth.instance.login();
+  //     if (result.status == LoginStatus.success) {
+  //       final userData = await FacebookAuth.instance.getUserData();
+  //       String email = userData['email'];
+  //       String profilePicture = userData['picture']['data']['url'];
+  //       toastBarWidget.displaySnackBar(
+  //         'Logged in as: $email',
+  //         Colors.green,
+  //         Colors.white,
+  //         context,
+  //       );
+  //     } else {
+  //       debugPrint('Facebook login failed:${result.message}');
+  //       toastBarWidget.displaySnackBar(
+  //         'Facebook login failed: ${result.message}',
+  //         Colors.red,
+  //         Colors.white,
+  //         context,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Error occurred:$e');
+  //     toastBarWidget.displaySnackBar(
+  //       'Error occurred: $e',
+  //       Colors.red,
+  //       Colors.white,
+  //       context,
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +323,19 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                       ),
                     ),
+                    // const SizedBox(height: 20),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     signInWithFacebook(); // Call Facebook login function
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     primary: Colors.blue, // Facebook color
+                    //   ),
+                    //   child: Text(
+                    //     'Login with Facebook',
+                    //     style: GoogleFonts.poppins(color: Colors.white),
+                    //   ),
+                    // ),
                     const SizedBox(height: 20),
                     Text.rich(
                       TextSpan(

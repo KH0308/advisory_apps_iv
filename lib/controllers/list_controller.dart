@@ -18,7 +18,7 @@ class ListController extends GetxController {
     errorMessage.value = '';
     try {
       isLoading(true);
-      await Future.delayed(const Duration(seconds: 2), () async {
+      await Future.delayed(const Duration(seconds: 1), () async {
         var fetchedNovels = await DatabaseService().fetchListData();
         if (fetchedNovels['status']['code'] == 200) {
           listData.value = fetchedNovels['listing'];

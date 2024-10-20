@@ -30,8 +30,8 @@ class DatabaseService {
         debugPrint('${responseBody['status']['message']} 200');
 
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString('id', responseBody['status']['id']);
-        prefs.setString('token', responseBody['status']['token']);
+        prefs.setString('id', responseBody['id']);
+        prefs.setString('token', responseBody['token']);
 
         return responseBody;
       } else if (responseBody['status']['code'] == 400) {
@@ -64,12 +64,15 @@ class DatabaseService {
       final responseBody = json.decode(response.body);
 
       if (responseBody['status']['code'] == 200) {
+        debugPrint('$responseBody');
         return responseBody;
       } else if (responseBody['status']['code'] == 400) {
         debugPrint('Invalid Token');
+        debugPrint('$responseBody');
         return responseBody;
       } else if (response.statusCode == 404 || response.statusCode == 500) {
         debugPrint('Page Not Found or Server down');
+        debugPrint('$responseBody');
         return responseBody;
       } else {
         throw Exception('Failed to load list data');
