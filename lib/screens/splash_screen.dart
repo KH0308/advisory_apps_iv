@@ -41,9 +41,12 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 5), () async {
       const storage = FlutterSecureStorage();
 
-      final String tokenStore = await storage.read(key: 'key') ?? '';
+      final String tokenStore = await storage.read(key: 'token') ?? '';
+      final String idStore = await storage.read(key: 'idToken') ?? '';
 
-      if ((tokenStore.isEmpty || tokenStore == 'null')) {
+      if ((tokenStore.isEmpty ||
+          tokenStore == '' && idStore.isEmpty ||
+          idStore == '')) {
         navigateToSignIn();
       } else {
         navigateToHome();

@@ -37,6 +37,7 @@ dependencies:
   lottie: ^2.6.0
   get: ^4.6.6
   flutter_secure_storage: ^9.2.2
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:
