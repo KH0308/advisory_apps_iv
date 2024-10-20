@@ -25,38 +25,101 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  // Future<void> signInWithFacebook() async {
-  //   try {
-  //     final result = await FacebookAuth.instance.login();
-  //     if (result.status == LoginStatus.success) {
-  //       final userData = await FacebookAuth.instance.getUserData();
-  //       String email = userData['email'];
-  //       String profilePicture = userData['picture']['data']['url'];
-  //       toastBarWidget.displaySnackBar(
-  //         'Logged in as: $email',
-  //         Colors.green,
-  //         Colors.white,
-  //         context,
-  //       );
-  //     } else {
-  //       debugPrint('Facebook login failed:${result.message}');
-  //       toastBarWidget.displaySnackBar(
-  //         'Facebook login failed: ${result.message}',
-  //         Colors.red,
-  //         Colors.white,
-  //         context,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     debugPrint('Error occurred:$e');
-  //     toastBarWidget.displaySnackBar(
-  //       'Error occurred: $e',
-  //       Colors.red,
-  //       Colors.white,
-  //       context,
-  //     );
-  //   }
-  // }
+  Future<void> signInWithFacebook() async {
+    try {
+      final result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        final userData = await FacebookAuth.instance.getUserData();
+        String email = userData['email'];
+        String profilePicture = userData['picture']['data']['url'];
+        _showProfileDialog(email, profilePicture);
+      } else {
+        debugPrint('Facebook login failed:${result.message}');
+        toastBarWidget.displaySnackBar(
+          'Facebook login failed: ${result.message}',
+          Colors.red,
+          Colors.white,
+          context,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error occurred:$e');
+      toastBarWidget.displaySnackBar(
+        'Error occurred: $e',
+        Colors.red,
+        Colors.white,
+        context,
+      );
+    }
+  }
+
+  void _showProfileDialog(String email, String profilePicture) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: const EdgeInsets.all(10),
+        backgroundColor: Colors.brown.shade900,
+        title: Align(
+          alignment: Alignment.center,
+          child: Text(
+            email,
+            style: GoogleFonts.lato(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: NetworkImage(profilePicture),
+            ),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          Obx(
+            () => TextButton(
+              onPressed: () async {
+                //use credidential provide by advisory to getting a token
+                await authController.signInUserFB(
+                  'movida@advisoryapps.com',
+                  'movida123',
+                  profilePicture,
+                  context,
+                );
+              },
+              child: authController.isLoadingFB.isTrue
+                  ? Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.grey.shade400,
+                          strokeWidth: 4.0,
+                          strokeCap: StrokeCap.round,
+                          valueColor:
+                              const AlwaysStoppedAnimation(Colors.white),
+                        ),
+                      ),
+                    )
+                  : Text(
+                      'Lets Go',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +149,7 @@ class _SignInScreenState extends State<SignInScreen> {
               physics: const RangeMaintainingScrollPhysics(),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.95,
+                height: MediaQuery.of(context).size.height * 0.90,
                 child: Column(
                   children: [
                     Padding(
@@ -323,19 +386,52 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                       ),
                     ),
-                    // const SizedBox(height: 20),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     signInWithFacebook(); // Call Facebook login function
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     primary: Colors.blue, // Facebook color
-                    //   ),
-                    //   child: Text(
-                    //     'Login with Facebook',
-                    //     style: GoogleFonts.poppins(color: Colors.white),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: 40,
+                      width: 100,
+                      child: Center(
+                        child: Text(
+                          'OR',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        var resultState =
+                            await authController.checkConnectivity();
+
+                        if (resultState == true) {
+                          signInWithFacebook();
+                        } else {
+                          toastBarWidget.displaySnackBar(
+                            'Opps something wrong with connection',
+                            Colors.red,
+                            Colors.white,
+                            context,
+                          );
+                        }
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        'Login with Facebook',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     Text.rich(
                       TextSpan(

@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>FacebookAppID</key>
+	<string>1025393779356605</string>
+	<key>FacebookClientToken</key>
+	<string>5e0ad2b0c2cfa9d8a56a126ac80566a9</string>
+	<key>FacebookDisplayName</key>
+	<string>Advisory Apps</string>
 </dict>
 </plist>

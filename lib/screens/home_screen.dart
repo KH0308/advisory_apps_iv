@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,15 +47,30 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            leading: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.transparent,
-              child: Image.asset(
-                'assets/images/advisory_logo.png',
-                width: 35,
-                height: 35,
-                fit: BoxFit.fill,
-              ),
+            leading: Obx(
+              () => listController.picString.value != ''
+                  ? CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.transparent,
+                      child: ClipOval(
+                        child: Image.network(
+                          '${listController.picString}',
+                          width: 35,
+                          height: 35,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    )
+                  : CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.transparent,
+                      child: Image.asset(
+                        'assets/images/advisory_logo.png',
+                        width: 35,
+                        height: 35,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
             ),
             centerTitle: true,
             title: Text.rich(
@@ -87,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   await prefs.clear();
+                  await FacebookAuth.instance.logOut();
                   Get.offAllNamed('/signinScreen');
                 },
                 icon: Icon(
@@ -146,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 await prefs.clear();
+                                await FacebookAuth.instance.logOut();
                                 Get.offAllNamed('/signinScreen');
                               },
                               style: ButtonStyle(
@@ -205,59 +223,62 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.black,
                   onRefresh: listController.fetchData,
                   child: listController.listData.isNotEmpty
-                      ? ListView.separated(
-                          itemCount: listController.listData.length,
-                          separatorBuilder: (context, index) => Divider(
-                            color: Colors.brown.shade400,
-                          ),
-                          itemBuilder: (context, index) {
-                            final dataIndex = listController.listData[index];
-                            return Card(
-                              color: Colors.brown.shade900,
-                              shadowColor: Colors.black,
-                              child: ListTile(
-                                tileColor: Colors.transparent,
-                                leading: CircleAvatar(
-                                  radius: 20,
-                                  backgroundColor: Colors.white,
-                                  child: Text(
-                                    dataIndex['id'],
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.separated(
+                            itemCount: listController.listData.length,
+                            separatorBuilder: (context, index) => Divider(
+                              color: Colors.brown.shade400,
+                            ),
+                            itemBuilder: (context, index) {
+                              final dataIndex = listController.listData[index];
+                              return Card(
+                                color: Colors.brown.shade900,
+                                shadowColor: Colors.black,
+                                child: ListTile(
+                                  tileColor: Colors.transparent,
+                                  leading: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.white,
+                                    child: Text(
+                                      dataIndex['id'],
+                                      style: GoogleFonts.lato(
+                                        color: Colors.brown.shade900,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    'Name: ${dataIndex['list_name']}',
                                     style: GoogleFonts.lato(
-                                      color: Colors.brown.shade900,
-                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                                title: Text(
-                                  'Name: ${dataIndex['list_name']}',
-                                  style: GoogleFonts.lato(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                  subtitle: Text(
+                                    'Distance: ${dataIndex['distance']}',
+                                    style: GoogleFonts.lato(
+                                      color: Colors.grey.shade400,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
+                                  onTap: () {
+                                    final nameTap = dataIndex['list_name'];
+                                    final distanceTap = dataIndex['distance'];
+                                    toastBarWidget.displaySnackBar(
+                                      'You tap on:\nName: $nameTap\nDistance: $distanceTap',
+                                      Colors.brown.shade900,
+                                      Colors.white,
+                                      context,
+                                    );
+                                  },
                                 ),
-                                subtitle: Text(
-                                  'Distance: ${dataIndex['distance']}',
-                                  style: GoogleFonts.lato(
-                                    color: Colors.grey.shade400,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                onTap: () {
-                                  final nameTap = dataIndex['list_name'];
-                                  final distanceTap = dataIndex['distance'];
-                                  toastBarWidget.displaySnackBar(
-                                    'You tap on:\nName: $nameTap\nDistance: $distanceTap',
-                                    Colors.brown.shade900,
-                                    Colors.white,
-                                    context,
-                                  );
-                                },
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         )
                       : Align(
                           alignment: Alignment.center,

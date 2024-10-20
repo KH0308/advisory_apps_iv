@@ -9,6 +9,7 @@ import '../services/database_service.dart';
 
 class AuthController extends GetxController {
   var isLoading = false.obs;
+  var isLoadingFB = false.obs;
   var obsScrText = true.obs;
   ToastBarWidget toastBarWidget = ToastBarWidget();
 
@@ -59,6 +60,41 @@ class AuthController extends GetxController {
     } finally {
       isLoading(false);
       debugPrint('Final loading state ${isLoading.value}');
+    }
+  }
+
+  Future<void> signInUserFB(
+      String email, String pass, String pic, BuildContext context) async {
+    try {
+      isLoadingFB(true);
+      debugPrint('${isLoadingFB.value}');
+      debugPrint(
+          'Sending request to login with email: $email and password: $pass');
+      var fetchSignIn = await DatabaseService().authSignInFB(email, pass, pic);
+      debugPrint('$fetchSignIn');
+      if (fetchSignIn['status']['code'] == 200) {
+        toastBarWidget.displaySnackBar(
+          'Welcome Back',
+          Colors.black,
+          Colors.white,
+          context,
+        );
+        isLoadingFB(false);
+        Get.offAllNamed('/homeScreen');
+      } else {
+        isLoadingFB(false);
+        toastBarWidget.displaySnackBar(
+          '${fetchSignIn['status']['message']}',
+          Colors.black,
+          Colors.red,
+          context,
+        );
+      }
+    } catch (e) {
+      'Failed to sign in: $e';
+    } finally {
+      isLoadingFB(false);
+      debugPrint('Final loading state ${isLoadingFB.value}');
     }
   }
 }

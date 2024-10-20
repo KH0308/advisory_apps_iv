@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/database_service.dart';
 
@@ -7,18 +8,27 @@ class ListController extends GetxController {
   var listData = [].obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+  var picString = ''.obs;
 
   @override
   void onInit() {
     fetchData();
+    fetchPicFB();
     super.onInit();
+  }
+
+  Future<void> fetchPicFB() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String pic = prefs.getString('picFB') ?? '';
+
+    picString.value = pic;
   }
 
   Future<void> fetchData() async {
     errorMessage.value = '';
     try {
       isLoading(true);
-      await Future.delayed(const Duration(seconds: 1), () async {
+      await Future.delayed(const Duration(milliseconds: 500), () async {
         var fetchedNovels = await DatabaseService().fetchListData();
         if (fetchedNovels['status']['code'] == 200) {
           listData.value = fetchedNovels['listing'];
