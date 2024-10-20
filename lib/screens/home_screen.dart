@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           appBar: AppBar(
             leading: CircleAvatar(
-              radius: 100,
+              radius: 50,
               child: Image.asset(
                 'assets/images/advisory_logo.png',
                 fit: BoxFit.cover,
@@ -93,13 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          body: Obx(
-            () {
-              if (listController.isLoading.value) {
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.95,
-                  child: Align(
+          body: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.95,
+            child: Obx(
+              () {
+                if (listController.isLoading.value) {
+                  return Align(
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.black,
@@ -109,70 +109,73 @@ class _HomeScreenState extends State<HomeScreen> {
                         Colors.brown.shade400,
                       ),
                     ),
-                  ),
-                );
-              } else if (listController.errorMessage.value == 'Invalid Token') {
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) => AlertDialog.adaptive(
-                    backgroundColor: Colors.brown.shade900,
-                    title: Text(
-                      'Token Expired or Invalid',
-                      style: GoogleFonts.lato(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    content: Text(
-                      'You will be ridirect to page login',
-                      style: GoogleFonts.lato(
-                        color: Colors.grey.shade400,
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    actionsAlignment: MainAxisAlignment.center,
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          const storage = FlutterSecureStorage();
-                          await storage.deleteAll();
-                          Get.offAllNamed('/signinScreen');
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          fixedSize:
-                              MaterialStateProperty.all(const Size(80, 20)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                  );
+                } else if (listController.errorMessage.value ==
+                    'Invalid Token') {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => AlertDialog.adaptive(
+                          backgroundColor: Colors.brown.shade900,
+                          title: Text(
+                            'Token Expired or Invalid',
+                            style: GoogleFonts.lato(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        child: Text(
-                          'Proceed',
-                          style: GoogleFonts.lato(
-                            color: Colors.black,
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal,
+                          content: Text(
+                            'You will be redirected to the login page',
+                            style: GoogleFonts.lato(
+                              color: Colors.grey.shade400,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
+                          actionsAlignment: MainAxisAlignment.center,
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                const storage = FlutterSecureStorage();
+                                await storage.deleteAll();
+                                Get.offAllNamed('/signinScreen');
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(100, 20)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                'Proceed',
+                                style: GoogleFonts.lato(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (listController.errorMessage.value != 'Invalid Token') {
-                return RefreshIndicator(
-                  color: Colors.brown.shade400,
-                  backgroundColor: Colors.black,
-                  onRefresh: listController.fetchData,
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.95,
+                      );
+                    },
+                  );
+                } else if (listController.errorMessage.value !=
+                    'Invalid Token') {
+                  return RefreshIndicator(
+                    color: Colors.brown.shade400,
+                    backgroundColor: Colors.black,
+                    onRefresh: listController.fetchData,
                     child: ListView(
                       children: [
                         Center(
@@ -188,14 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.95,
-                child: RefreshIndicator(
+                return RefreshIndicator(
                   color: Colors.brown.shade400,
                   backgroundColor: Colors.black,
                   onRefresh: listController.fetchData,
@@ -265,9 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

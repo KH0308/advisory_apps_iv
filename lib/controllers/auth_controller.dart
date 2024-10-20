@@ -35,7 +35,10 @@ class AuthController extends GetxController {
     try {
       isLoading(true);
       debugPrint('${isLoading.value}');
+      debugPrint(
+          'Sending request to login with email: $email and password: $pass');
       var fetchSignIn = await DatabaseService().authSignIn(email, pass);
+      debugPrint('$fetchSignIn');
       if (fetchSignIn['status']['code'] == 200) {
         toastBarWidget.displaySnackBar(
           'Welcome Back',

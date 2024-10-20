@@ -67,21 +67,15 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: ClipRRect(
-                    child: CircleAvatar(
-                      radius: 100,
-                      child: Image.asset(
-                        'assets/images/advisory_logo.png',
-                        fit: BoxFit.cover,
-                      ),
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 100,
+                    child: Image.asset(
+                      'assets/images/advisory_logo.png',
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
