@@ -38,11 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkTokenStatus() async {
-    await Future.delayed(const Duration(seconds: 5), () async {
+    await Future.delayed(const Duration(seconds: 4), () async {
       const storage = FlutterSecureStorage();
 
       final String tokenStore = await storage.read(key: 'token') ?? '';
-      final String idStore = await storage.read(key: 'idToken') ?? '';
+      final String idStore = await storage.read(key: 'id') ?? '';
 
       if ((tokenStore.isEmpty ||
           tokenStore == '' && idStore.isEmpty ||

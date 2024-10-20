@@ -18,17 +18,19 @@ class ListController extends GetxController {
     errorMessage.value = '';
     try {
       isLoading(true);
-      var fetchedNovels = await DatabaseService().fetchListData();
-      if (fetchedNovels['status']['code'] == 200) {
-        listData.value = fetchedNovels['listing'];
-        isLoading.value = false;
-      } else if (fetchedNovels['listing'] == []) {
-        listData.value = [];
-        isLoading.value = false;
-      } else {
-        errorMessage.value = 'Invalid Token';
-        isLoading.value = false;
-      }
+      await Future.delayed(const Duration(seconds: 2), () async {
+        var fetchedNovels = await DatabaseService().fetchListData();
+        if (fetchedNovels['status']['code'] == 200) {
+          listData.value = fetchedNovels['listing'];
+          isLoading.value = false;
+        } else if (fetchedNovels['listing'] == []) {
+          listData.value = [];
+          isLoading.value = false;
+        } else {
+          errorMessage.value = 'Invalid Token';
+          isLoading.value = false;
+        }
+      });
     } catch (e) {
       errorMessage.value = 'Failed to load novels: $e';
       debugPrint(errorMessage.value);

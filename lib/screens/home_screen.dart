@@ -80,7 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  const storage = FlutterSecureStorage();
+                  await storage.deleteAll();
+                  Get.offAllNamed('/signinScreen');
+                },
                 icon: Icon(
                   Icons.logout_rounded,
                   color: Colors.brown.shade900,

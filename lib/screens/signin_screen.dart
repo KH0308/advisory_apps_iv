@@ -67,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage("assets/images/DishCraft_logo.png"),
+                          image: AssetImage("assets/images/advisory_logo.png"),
                           fit: BoxFit.fill,
                         ),
                       ),
